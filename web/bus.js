@@ -142,7 +142,10 @@ class BusNode extends LGraphNode {
 		if (this.graph && !app.configuringGraph) {
 			const id = idOf(this);
 			const taken = busNodes(this.graph).filter(n => n !== this).map(idOf);
-			if (id && taken.includes(id)) this.widgets[0].value = uniqueName(id, taken);
+			if (id && taken.includes(id)) {
+				const base = id.replace(/_\d+$/, "");
+				this.widgets[0].value = uniqueName(base, [...taken, base]);
+			}
 		}
 		this._lastId = idOf(this);
 	}
