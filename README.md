@@ -107,6 +107,10 @@ node --test tests/          # pure logic
 
 `tests/browser.mjs` is an end-to-end check in Chromium (needs `playwright-core` and a ComfyUI on port 8199; see the header of the file).
 
+## 📦 Releasing
+
+Bump `version` in `pyproject.toml` (semver) and push to `main`. The `Publish to Comfy registry` workflow runs only when `pyproject.toml` changes, using the `REGISTRY_ACCESS_TOKEN` repo secret (publisher `javierportillo`). Docs, tests and `SPEC.md` are excluded via `.comfyignore`.
+
 ## 📄 License
 
 MIT
