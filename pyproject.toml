@@ -11,5 +11,5 @@ Repository = "https://github.com/javierportillo/comfyui-bus"
 "Bug Tracker" = "https://github.com/javierportillo/comfyui-bus/issues"
 
 [tool.comfy]
-PublisherId = "" # TODO: fill in from https://registry.comfy.org after creating a publisher
+PublisherId = "javierportillo"
 DisplayName = "Bus"
