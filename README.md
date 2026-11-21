@@ -7,6 +7,7 @@
 A dynamic, remote-capable **Bus** node for ComfyUI. Plug anything in once, then pick it up from any other Bus by id. Rename it, reorder it, override it, extend it, with no spaghetti and no packed-dict instability.
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
+[![Comfy Registry](https://img.shields.io/badge/Comfy%20Registry-comfyui--bus-orange)](https://registry.comfy.org/nodes/comfyui-bus)
 ![ComfyUI frontend](https://img.shields.io/badge/ComfyUI%20frontend-%E2%89%A5%201.58.5-8a63d2)
 ![Backend](https://img.shields.io/badge/backend%20changes-none-success)
 
@@ -29,6 +30,12 @@ Context/bus nodes are great until a workflow gets big: slots vanish when you dis
 - 🧩 **Zero backend footprint.** Bus is frontend-only. The prompt sent to the backend contains plain links, so caching, validation and API export behave exactly as if you had wired everything by hand.
 
 ## 🚀 Install
+
+**ComfyUI-Manager:** search for **Bus**.
+
+**Comfy CLI:** `comfy node install comfyui-bus`
+
+**Manual:**
 
 ```bash
 cd ComfyUI/custom_nodes
