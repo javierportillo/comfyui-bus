@@ -127,19 +127,24 @@ class BusNode extends LGraphNode {
 	}
 
 	onConfigure() {
-		this._lastId = idOf(this);
 		this.widgets[1].value ||= NONE;
+		this.ensureUniqueId();
 		scheduleSyncAll();
 	}
 
 	onAdded() {
-		if (!app.configuringGraph) {
+		this.ensureUniqueId();
+		scheduleSyncAll();
+	}
+
+	// Pasted or cloned buses get a suffixed id. Loading a workflow never renames.
+	ensureUniqueId() {
+		if (this.graph && !app.configuringGraph) {
 			const id = idOf(this);
 			const taken = busNodes(this.graph).filter(n => n !== this).map(idOf);
 			if (id && taken.includes(id)) this.widgets[0].value = uniqueName(id, taken);
-			this._lastId = idOf(this);
 		}
-		scheduleSyncAll();
+		this._lastId = idOf(this);
 	}
 
 	onRemoved() {
@@ -176,8 +181,8 @@ class BusNode extends LGraphNode {
 	}
 
 	onConnectionsChange(slotType, slot, connected, link) {
-		if (app.configuringGraph || this._syncing) return;
-		if (slotType === LiteGraph.INPUT && connected && slot === this.outputs.length) this.addMember(link);
+		if (!this.graph || app.configuringGraph || this._syncing) return;
+		if (slotType === LiteGraph.INPUT && connected && link && slot === this.outputs.length) this.addMember(link);
 		scheduleSyncAll();
 	}
 

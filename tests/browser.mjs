@@ -94,6 +94,16 @@ const result = await page.evaluate(async () => {
   ok("duplicate id errors", threw && threw.includes("duplicate"), threw);
   D.widgets[0].value = "empty"; D.onIdChanged("empty");
 
+  // clone and paste
+  const E = mk("Bus", 400, 1200); E.widgets[0].value = "orig"; E.onIdChanged("orig");
+  const imgE = mk("EmptyImage", 0, 1200); imgE.connect(0, E, 0); await wait(100);
+  const cl = E.clone(); g.add(cl); await wait(100);
+  ok("clone keeps members, gets suffixed id", cl.widgets[0].value === "orig_2" && slots(cl).join() === slots(E).join(), [cl.widgets[0].value, slots(cl)]);
+  app.canvas.deselectAll(); app.canvas.selectNode(E); app.canvas.copyToClipboard();
+  app.canvas.pasteFromClipboard({ connectInputs: false }); await wait(200);
+  const ids = g._nodes.filter(n => n.type === "Bus").map(n => n.widgets[0].value);
+  ok("paste works, gets unique id", ids.includes("orig_3"), ids);
+
   // serialization round trip
   const wf = app.graph.serialize();
   await app.loadGraphData(JSON.parse(JSON.stringify(wf)));
