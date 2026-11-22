@@ -67,6 +67,24 @@ function scheduleSyncAll(delay = 0) {
 	}, delay);
 }
 
+// Buses pasted together keep pointing at each other: a consumer follows its publisher's paste rename.
+const pasteBatch = { buses: new Set(), renames: new Map() };
+function trackPaste(bus, oldId, newId) {
+	if (!pasteBatch.buses.size) {
+		setTimeout(() => {
+			for (const b of pasteBatch.buses) {
+				const id = pasteBatch.renames.get(sourceOf(b));
+				if (id) b.widgets[1].value = id;
+			}
+			pasteBatch.buses.clear();
+			pasteBatch.renames.clear();
+			scheduleSyncAll();
+		});
+	}
+	pasteBatch.buses.add(bus);
+	if (oldId && oldId !== newId) pasteBatch.renames.set(oldId, newId);
+}
+
 function syncAll() {
 	const buses = allGraphs().flatMap(busNodes);
 	for (let pass = 0, changed = true; changed && pass < 20; pass++) {
@@ -146,6 +164,7 @@ class BusNode extends LGraphNode {
 				const base = id.replace(/_\d+$/, "");
 				this.widgets[0].value = uniqueName(base, [...taken, base]);
 			}
+			trackPaste(this, id, idOf(this));
 		}
 		this._lastId = idOf(this);
 	}

@@ -79,7 +79,7 @@ Add a Bus at the start of each section with no id (it only receives) and one at 
 | Upstream renames or reorders | Flows down automatically |
 | Upstream deletes a member | Disappears downstream. If you had plugged an override, it is kept as your own member |
 | Rename the publisher's `id` | Consumers follow |
-| Paste or clone a Bus | Members keep their uids; a duplicate id gets a `_2` suffix |
+| Paste or clone a Bus | Members keep their uids; a duplicate id gets the next `_N` suffix. Copy a publisher together with its consumers and the copies read from the copied publisher |
 | Muted publisher | All its members are unfed |
 
 Member types are locked at creation. A different type means a new member.

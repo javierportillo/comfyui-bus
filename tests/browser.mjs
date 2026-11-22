@@ -106,6 +106,19 @@ const result = await page.evaluate(async () => {
   const ids = g._nodes.filter(n => n.type === "Bus").map(n => n.widgets[0].value);
   ok("paste works, gets unique id", ids.includes("orig_4"), ids);
 
+  // copying a publisher with its consumer: the copy follows the copied publisher
+  const P = mk("Bus", 400, 1500); P.widgets[0].value = "sec"; P.onIdChanged("sec");
+  const imgP = mk("EmptyImage", 0, 1500); imgP.connect(0, P, 0); await wait(100);
+  const Q = mk("Bus", 800, 1500); Q.widgets[1].value = "sec"; Q.onSourceChanged(); await wait(150);
+  app.canvas.deselectAll(); app.canvas.selectNode(P); app.canvas.selectNode(Q, true); app.canvas.copyToClipboard();
+  const beforePaste = new Set(g._nodes);
+  app.canvas.pasteFromClipboard({ connectInputs: true }); await wait(300);
+  const [P2, Q2] = g._nodes.filter(n => !beforePaste.has(n) && n.type === "Bus").sort((a, b) => a.pos[0] - b.pos[0]);
+  ok("pasted consumer follows pasted publisher", P2.widgets[0].value === "sec_2" && Q2.widgets[1].value === "sec_2" && Q.widgets[1].value === "sec", [P2.widgets[0].value, Q2.widgets[1].value, Q.widgets[1].value]);
+  ok("pasted consumer keeps its slots", slots(Q2).join() === slots(Q).join(), slots(Q2));
+  const Q3 = Q.clone(); g.add(Q3); await wait(100);
+  ok("consumer duplicated alone keeps original source", Q3.widgets[1].value === "sec", Q3.widgets[1].value);
+
   // serialization round trip
   const wf = app.graph.serialize();
   await app.loadGraphData(JSON.parse(JSON.stringify(wf)));

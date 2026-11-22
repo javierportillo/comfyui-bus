@@ -55,7 +55,7 @@ One node type, **Bus**. A named, typed, ordered set of members that any downstre
 - Consumers store the publisher's id string, resolved internally to the publisher node. Renaming an id on the publisher updates consumers.
 - Missing source id: red "missing bus" state, queue error.
 - Duplicate ids in the same scope: red badge on both, queue error.
-- Copy/paste/clone: members keep uids, pasted node's id gets `_2` suffix.
+- Copy/paste/clone: members keep uids, pasted node's id gets the next free `_N` suffix. Buses pasted together follow each other: a pasted consumer whose publisher was pasted in the same batch switches to the copy's new id.
 - Scope: own graph plus enclosing graphs (inward visibility only).
 - Cycles (including loaded or edited workflows): queue-time error naming the nodes.
 
