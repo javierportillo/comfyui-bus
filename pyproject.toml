@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-bus"
 description = "A dynamic, remote-capable Bus node: named, typed, ordered members that downstream buses inherit by id, override and extend."
-version = "0.1.1"
+version = "0.1.2"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = ["comfyui-frontend-package>=1.58.5"]
